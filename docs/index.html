@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#020617"/>
+  <title>Bennyfilt – AI for Water</title>
+
+  <link rel="manifest" href="./manifest.webmanifest"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-title" content="Bennyfilt"/>
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png"/>
+
+  <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <img src="./logo.png" alt="Bennyfilt logo"/>
+        <div>
+          <div class="badge"><span class="smallcaps">Bennyfilt</span> <span>•</span> <span>Offline PWA Dashboard</span></div>
+          <h1>Filter Life & Water Quality Predictor</h1>
+          <p>Inputs: Lead, Arsenic, Turbidity, and planned daily treated volume (L/day). Runs offline after first load.</p>
+        </div>
+      </div>
+      <button class="btn" id="export">Export Report (JSON)</button>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>User Inputs</h2>
+
+        <div class="field">
+          <div class="label"><span>Lead concentration (mg/L)</span></div>
+          <input id="pb" type="number" step="0.001" min="0" value="0.20"/>
+        </div>
+
+        <div class="field">
+          <div class="label"><span>Arsenic concentration (mg/L)</span></div>
+          <input id="as" type="number" step="0.001" min="0" value="1.00"/>
+        </div>
+
+        <div class="field">
+          <div class="label"><span>Turbidity (NTU)</span><span class="smallcaps">0–1500</span></div>
+          <input id="turb" type="number" step="1" min="0" max="1500" value="500"/>
+          <div class="hint">Typical galamsey water can reach 300–1000+ NTU.</div>
+        </div>
+
+        <div class="field">
+          <div class="label"><span>Water treated per day (L/day)</span></div>
+          <input id="flow" type="number" step="10" min="0" value="2000"/>
+          <div class="hint">Increasing L/day reduces predicted filter life (days).</div>
+        </div>
+
+        <div class="note">
+          <b>Exhibition note:</b> This is a decision-support estimator for your filter system.
+          Confirm with lab tests for final claims.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kpis">
+          <div class="kpi">
+            <div class="t"><span>Pb removal</span><span>✓</span></div>
+            <div class="v" id="k_pbrem">—</div>
+            <div class="s" id="k_pbsub">—</div>
+          </div>
+          <div class="kpi">
+            <div class="t"><span>As removal</span><span>✓</span></div>
+            <div class="v" id="k_asrem">—</div>
+            <div class="s" id="k_assub">—</div>
+          </div>
+          <div class="kpi">
+            <div class="t"><span>Filter life</span><span>⚠</span></div>
+            <div class="v" id="k_life">—</div>
+            <div class="s" id="k_lifesub">—</div>
+          </div>
+          <div class="kpi">
+            <div class="t"><span>Fouling factor</span><span>💧</span></div>
+            <div class="v" id="k_foul">—</div>
+            <div class="s" id="k_foulsub">—</div>
+          </div>
+        </div>
+
+        <div class="charts">
+          <div class="chart">
+            <div class="ct">Treated volume vs days (L)</div>
+            <svg id="chart1" role="img" aria-label="Treated volume chart"></svg>
+          </div>
+          <div class="chart">
+            <div class="ct">Remaining media trend (%)</div>
+            <svg id="chart2" role="img" aria-label="Remaining media chart"></svg>
+          </div>
+        </div>
+
+        <div class="note">
+          Internal assumptions: media mass <b>3 kg</b>; capacity <b>6 mg/g</b> (combined proxy). Turbidity increases fouling penalty.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
